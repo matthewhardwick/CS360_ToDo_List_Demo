@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="left|top">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addToDoEditText"
+            android:layout_toLeftOf="@+id/addToDobutton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignBottom="@+id/addToDobutton" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add ToDo"
+            android:id="@+id/addToDobutton"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true" />
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MainActivity"
+            tools:ignore="MergeRootFrame"
+            android:layout_below="@+id/addToDoEditText">
+        </FrameLayout>
+    </RelativeLayout>
+</LinearLayout>
