@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity {
-    List<String> listItems;
+    List<TodoItem> listItems;
     TodoListFragment listFragment;
     Button addItemButton;
     EditText addItemEditText;
@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listItems = new ArrayList<String>();
+        listItems = new ArrayList<TodoItem>();
         listFragment = new TodoListFragment(listItems);
 
         addItemButton = (Button) findViewById(R.id.addToDobutton);
@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 String itemToAdd = addItemEditText.getText().toString();
                 if (itemToAdd != null && itemToAdd.length() > 0)
-                    listFragment.addItem(itemToAdd);
+                    listFragment.addItem(new TodoItem(itemToAdd.toString(), false));
                 addItemEditText.setText("");
             }
         });
