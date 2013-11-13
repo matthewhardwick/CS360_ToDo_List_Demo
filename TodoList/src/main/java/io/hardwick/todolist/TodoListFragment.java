@@ -21,6 +21,8 @@ public class TodoListFragment extends Fragment implements AdapterView.OnItemClic
     ArrayAdapter<TodoItem> adapter;
     ListView listView;
     List<TodoItem> items;
+    TodoItemLongClickListener mListener;
+
 
     public TodoListFragment(List<TodoItem> items) {
         this.items = items;
@@ -30,12 +32,14 @@ public class TodoListFragment extends Fragment implements AdapterView.OnItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
 
+
         View view;
         view = inflater.inflate(R.layout.todo_list_view, container, false);
 
         listView = (ListView) view.findViewById(R.id.todo_listview);
         adapter = new TodoAdapter(context, R.layout.todo_list_view_item, items);
         listView.setAdapter(adapter);
+        adapter.setNotifyOnChange(true);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
 
@@ -46,7 +50,6 @@ public class TodoListFragment extends Fragment implements AdapterView.OnItemClic
         adapter.add(item);
         adapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -63,11 +66,20 @@ public class TodoListFragment extends Fragment implements AdapterView.OnItemClic
             checkedTextView.setChecked(true);
         }
     }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof TodoItemLongClickListener) {
+            mListener = (TodoItemLongClickListener) activity;
+        } else {
+            throw new ClassCastException(activity.toString()
+                    + " must implemenet TodoListFragment.TodoItemLongClickListener");
+        }
+    }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        adapter.remove(adapter.getItem(i));
-        adapter.notifyDataSetChanged();
+        mListener.TodoDetailViewFor(i);
         return true;
     }
 
@@ -85,29 +97,28 @@ public class TodoListFragment extends Fragment implements AdapterView.OnItemClic
 
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = convertView;
-            TodoHolder holder = null;
 
-            if (row == null) {
-                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-                row = inflater.inflate(layoutResourceId, parent, false);
+            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+            row = inflater.inflate(layoutResourceId, parent, false);
 
-                holder = new TodoHolder();
-                holder.checkedTextView = (CheckedTextView) row.findViewById(R.id.checkedTextView);
-
-                row.setTag(holder);
-            } else {
-                holder = (TodoHolder) row.getTag();
-            }
+            CheckedTextView checkedTextView = (CheckedTextView) row.findViewById(R.id.checkedTextView);
 
             TodoItem item = data.get(position);
-            holder.checkedTextView.setText(item.getTodo_string());
-            holder.checkedTextView.setChecked(item.isTodo_complete());
+            checkedTextView.setText(item.getTodo_string());
+            if (item.isTodo_complete()) {
+                checkedTextView.setPaintFlags(checkedTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                checkedTextView.setChecked(true);
+            } else {
+                checkedTextView.setPaintFlags(checkedTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                checkedTextView.setChecked(false);
+            }
 
             return row;
         }
 
-        class TodoHolder {
-            CheckedTextView checkedTextView;
-        }
+    }
+
+    public interface TodoItemLongClickListener {
+        public void TodoDetailViewFor(int position);
     }
 }

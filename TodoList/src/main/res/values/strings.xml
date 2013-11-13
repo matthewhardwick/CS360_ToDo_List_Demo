@@ -4,5 +4,8 @@
     <string name="app_name">TodoList</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="delete">Delete Todo</string>
+    <string name="complete">Task is Complete!</string>
+    <string name="not_complete">Task is not complete</string>
 
 </resources>

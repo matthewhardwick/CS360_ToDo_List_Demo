@@ -9,7 +9,7 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements TodoListFragment.TodoItemLongClickListener {
     List<TodoItem> listItems;
     TodoListFragment listFragment;
     Button addItemButton;
@@ -41,5 +41,13 @@ public class MainActivity extends Activity {
                     .add(R.id.container, listFragment)
                     .commit();
         }
+    }
+
+    @Override
+    public void TodoDetailViewFor(int position) {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new TodoDetailFragment(listItems.get(position)))
+                .addToBackStack("detailViewBack")
+                .commit();
     }
 }
